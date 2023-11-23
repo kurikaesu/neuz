@@ -2,6 +2,7 @@ use std::time::{Duration, Instant};
 
 use slog::Logger;
 use tauri::Window;
+use tauri::Manager;
 
 use super::Behavior;
 use crate::{
@@ -48,7 +49,11 @@ impl<'a> Behavior<'a> for SupportBehavior<'a> {
         _frontend_info: &mut FrontendInfo,
         config: &BotConfig,
         image: &mut ImageAnalyzer,
+        app_handle: &tauri::AppHandle,
+        logger: &Logger,
     ) {
+        let reset_timers = config.should_reset_timers();
+        let mut original_config = config.clone();
         let config = config.support_config();
         let target_marker = image.identify_target_marker(true);
         self.update_slots_usage(config);
@@ -59,9 +64,26 @@ impl<'a> Behavior<'a> for SupportBehavior<'a> {
             return;
         }
 
+        if reset_timers {
+            self.slots_usage_last_time = [[None; 10]; 9];
+            original_config.set_reset_timers(false);
+            let mylogger = logger.clone();
+            let local_app_handler = app_handle.clone();
+            std::thread::spawn(move || {
+                match serde_json::to_string(&original_config) {
+                    Ok(payload) => {
+                        local_app_handler.trigger_global("bot_config_c2s", Some(payload));
+                    }
+                    Err(e) => {
+                        slog::error!(mylogger, "Failed to reset timers");
+                    }
+                }
+            });
+            return;
+        }
+
         self.check_restorations(config, image);
         std::thread::sleep(Duration::from_millis(100));
-
         if image.client_stats.target_hp.value > 0 {
             if let Some(target_marker) = target_marker {
                 let marker_distance = image.get_target_marker_distance(target_marker);
@@ -70,6 +92,7 @@ impl<'a> Behavior<'a> for SupportBehavior<'a> {
                         self.last_far_from_target = Some(Instant::now());
                     }
                     self.avoid_obstacle(config);
+                    self.check_following(config, &logger);
                 } else {
                     self.last_far_from_target = None;
                     self.check_buffs(config);
@@ -173,6 +196,14 @@ impl SupportBehavior<'_> {
         if self.last_buff_usage.elapsed().as_millis() > config.interval_between_buffs() {
             self.last_buff_usage = Instant::now();
             self.get_slot_for(config, None, SlotType::BuffSkill, true);
+            std::thread::sleep(Duration::from_millis(100));
+        }
+    }
+
+    fn check_following(&mut self, config: &SupportConfig, logger: &Logger) {
+        if self.last_buff_usage.elapsed().as_millis() > config.interval_between_buffs() {
+            self.last_buff_usage = Instant::now();
+            self.get_slot_for(config, None, SlotType::Following, true);
             std::thread::sleep(Duration::from_millis(100));
         }
     }

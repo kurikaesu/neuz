@@ -58,6 +58,8 @@ impl<'a> Behavior<'a> for ShoutBehavior<'a> {
         _frontend_info: &mut FrontendInfo,
         config: &BotConfig,
         _analyzer: &mut ImageAnalyzer,
+        app_handle: &tauri::AppHandle,
+        logger: &Logger,
     ) {
         let config = config.shout_config();
         self.shout(config);

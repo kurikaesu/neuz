@@ -27,5 +27,7 @@ pub trait Behavior<'a> {
         frontend_info: &mut FrontendInfo,
         config: &BotConfig,
         analyzer: &mut ImageAnalyzer,
+        app_handle: &tauri::AppHandle,
+        logger: &Logger,
     );
 }

@@ -16,6 +16,7 @@ pub enum SlotType {
     BuffSkill,
     RezSkill,
     Flying,
+    Following,
 }
 impl fmt::Display for SlotType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -29,6 +30,7 @@ impl fmt::Display for SlotType {
             SlotType::BuffSkill => write!(f, "buff skill"),
             SlotType::RezSkill => write!(f, "rez skill"),
             SlotType::Flying => write!(f, "fly"),
+            SlotType::Following => write!(f, "following"),
             _ => write!(f, "??none??"),
         }
     }
@@ -355,11 +357,22 @@ pub struct BotConfig {
     farming_config: FarmingConfig,
     support_config: SupportConfig,
     shout_config: ShoutConfig,
+
+    // Should reset timers
+    should_reset_timers: bool,
 }
 
 impl BotConfig {
     pub fn toggle_active(&mut self) {
         self.is_running = !self.is_running;
+    }
+
+    pub fn set_reset_timers(&mut self, flag: bool) {
+        self.should_reset_timers = flag;
+    }
+
+    pub fn should_reset_timers(&self) -> bool {
+        self.should_reset_timers
     }
 
     pub fn is_running(&self) -> bool {

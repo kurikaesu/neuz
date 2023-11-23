@@ -516,12 +516,16 @@ fn start_bot(profile_id: String, state: tauri::State<AppState>, app_handle: taur
                         eval_send_key(&window, "Escape", KeyMode::Press);
                     }
                 }
+                let copied_app_handle = app_handle.clone();
+                let copied_logger = logger.clone();
                 match mode {
                     BotMode::Farming => {
                         farming_behavior.run_iteration(
                             &mut frontend_info_mut,
                             config,
                             &mut image_analyzer,
+                            &copied_app_handle,
+                            &copied_logger,
                         );
                     }
                     BotMode::AutoShout => {
@@ -529,6 +533,8 @@ fn start_bot(profile_id: String, state: tauri::State<AppState>, app_handle: taur
                             &mut frontend_info_mut,
                             config,
                             &mut image_analyzer,
+                            &copied_app_handle,
+                            &copied_logger,
                         );
                     }
                     BotMode::Support => {
@@ -536,6 +542,8 @@ fn start_bot(profile_id: String, state: tauri::State<AppState>, app_handle: taur
                             &mut frontend_info_mut,
                             config,
                             &mut image_analyzer,
+                            &copied_app_handle,
+                            &copied_logger,
                         );
                     }
                 }

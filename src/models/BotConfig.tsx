@@ -6,9 +6,9 @@ import IconRezSkill from '../assets/rez_spell.png'
 
 export type FixedArray<TItem, TLength extends number> = [TItem, ...TItem[]] & { length: TLength }
 
-export const slotTypes = ["Unused", "Food", "Pill", "HealSkill", "MpRestorer", "FpRestorer", "PickupPet", "PickupMotion", "AttackSkill", "BuffSkill", "RezSkill", "Flying"] as const;
+export const slotTypes = ["Unused", "Food", "Pill", "HealSkill", "MpRestorer", "FpRestorer", "PickupPet", "PickupMotion", "AttackSkill", "BuffSkill", "RezSkill", "Flying", "Following"] as const;
 export const thresholdSlotTypes = ["Food", "Pill", "HealSkill", "MpRestorer", "FpRestorer"];
-export const cooldownSlotTypes = ["Food", "Pill", "HealSkill", "AttackSkill", "BuffSkill", "MpRestorer", "FpRestorer", "PickupPet"];
+export const cooldownSlotTypes = ["Food", "Pill", "HealSkill", "AttackSkill", "BuffSkill", "MpRestorer", "FpRestorer", "PickupPet", "Following"];
 export const farmingSlotsBlacklist = ["HealSkill", "Flying", "RezSkill"]
 export const supportSlotsBlacklist = ["PickupPet", "PickupMotion", "AttackSkill"]
 
@@ -34,6 +34,7 @@ export const translateType = (type: SlotType) => {
         case 'BuffSkill': return '🪄'
         case 'RezSkill': return IconRezSkill
         case 'Flying': return '✈️'
+        case 'Following': return '✈️'
     }
 }
 
@@ -51,6 +52,7 @@ export const translateDesc = (type: SlotType, defaultUnused: string = '') => {
         case 'BuffSkill': return ['Buff', 'Buff skill']
         case 'RezSkill': return ['Rez', 'Resurection skill']
         case 'Flying': return ['Board', 'Board']
+        case 'Following': return ['Follow', 'Follow']
     }
 }
 export type SlotModel = {

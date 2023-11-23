@@ -86,6 +86,8 @@ impl<'a> Behavior<'a> for FarmingBehavior<'a> {
         frontend_info: &mut FrontendInfo,
         config: &BotConfig,
         image: &mut ImageAnalyzer,
+        app_handle: &tauri::AppHandle,
+        logger: &Logger,
     ) {
         let config = config.farming_config();
         // Update all needed timestamps

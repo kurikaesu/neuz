@@ -59,6 +59,12 @@ const MissionControl = ({ className, lastVersion, currentVersion }: Props) => {
         emit('bot_config_c2s', newConfig)
     }
 
+    const resetBuffTimers = () => {
+        if (!config) return
+        const resetPayload = { ...config, should_reset_timers: true }
+        emit('bot_config_c2s', resetPayload)
+    }
+
     const handleToggle = () => {
         if (!config) return
         const newConfig = { ...config }
@@ -112,6 +118,7 @@ const MissionControl = ({ className, lastVersion, currentVersion }: Props) => {
                         {!isNil(config?.mode) && <div className="btn sm" onClick={() => {invoke("focus_client")}}>Focus</div>}
                     </div>
                     {!isNil(config?.mode) && <div className="btn" onClick={setRunningToggle}>{config?.is_running ? 'Disengage' : 'Engage'}</div>}
+                    <div className="btn" onClick={resetBuffTimers}>Reset Buff Timers</div>
                 </div>
                 <Footer currentVersion={currentVersion} lastVersion={lastVersion} />
             </div>}
