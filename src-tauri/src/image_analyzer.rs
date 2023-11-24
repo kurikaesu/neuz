@@ -8,6 +8,7 @@ use libscreenshot::{ImageBuffer, WindowCaptureProvider};
 use rayon::iter::{ParallelBridge, ParallelIterator};
 use slog::Logger;
 use tauri::Window;
+use image::{imageops};
 
 use crate::{
     data::{point_selector, Bounds, ClientStats, MobType, Point, PointCloud, Target, TargetType},
@@ -54,8 +55,11 @@ impl ImageAnalyzer {
         }
 
         if let Some(provider) = libscreenshot::get_window_capture_provider() {
-            if let Ok(image) = provider.capture_window(self.window_id) {
-                self.image = Some(image);
+            if let Ok(mut image) = provider.capture_window(self.window_id) {
+                // We will crop the image to remove any bars above the actual data
+                let (width, height) = image.dimensions();
+                let cropped_image = imageops::crop(&mut image, 0, IGNORE_AREA_TOP, width, height).to_image();
+                self.image = Some(cropped_image);
             } else {
                 slog::warn!(logger, "Failed to capture window"; "window_id" => self.window_id);
             }
