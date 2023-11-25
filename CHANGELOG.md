@@ -6,6 +6,10 @@ Date format: `DD/MM/YYYY`
 [@slyker]: https://github.com/slyker
 <!-- /maintainers -->
 
+**0.16.4**
+- Fixes
+  - Fixes macOS and other situations where screen resolution messes up with the bot.
+
 **0.16.3**
 > Released on 24.3.2023
 - Support

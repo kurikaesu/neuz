@@ -11,6 +11,9 @@ mod windows;
 #[cfg(target_os = "windows")]
 pub use windows::IGNORE_AREA_TOP;
 
+#[cfg(target_os = "windows")]
+pub use windows::DPI_SCALE;
+
 //
 // macOS
 //
@@ -21,6 +24,9 @@ mod macos;
 #[cfg(target_os = "macos")]
 pub use macos::IGNORE_AREA_TOP;
 
+#[cfg(target_os = "macos")]
+pub use macos::DPI_SCALE;
+
 //
 // Linux
 //
@@ -30,3 +36,6 @@ mod linux;
 
 #[cfg(target_os = "linux")]
 pub use linux::IGNORE_AREA_TOP;
+
+#[cfg(target_os = "linux")]
+pub use linux::DPI_SCALE;

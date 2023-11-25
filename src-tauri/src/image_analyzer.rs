@@ -13,7 +13,7 @@ use image::{imageops};
 use crate::{
     data::{point_selector, Bounds, ClientStats, MobType, Point, PointCloud, Target, TargetType},
     ipc::FarmingConfig,
-    platform::{IGNORE_AREA_BOTTOM, IGNORE_AREA_TOP},
+    platform::{IGNORE_AREA_BOTTOM, IGNORE_AREA_TOP, DPI_SCALE},
     utils::Timer,
 };
 
@@ -56,9 +56,20 @@ impl ImageAnalyzer {
 
         if let Some(provider) = libscreenshot::get_window_capture_provider() {
             if let Ok(mut image) = provider.capture_window(self.window_id) {
-                // We will crop the image to remove any bars above the actual data
                 let (width, height) = image.dimensions();
-                let cropped_image = imageops::crop(&mut image, 0, IGNORE_AREA_TOP, width, height).to_image();
+
+                // We're expecting an 800x600 image so let's work out what the window ratio is
+                let widthRatio = 800.0 / (width as f32);
+                let height_resized = (height as f32) * widthRatio;
+
+                // Work out how much we need to crop out from the top if needed
+                let topIgnore = (height_resized - 600.0) as u32;
+
+                // Resize the image to 800x600
+                let mut resized_image = imageops::resize(&mut image, 800, 600, imageops::FilterType::Nearest);
+
+                // We will crop the image to remove any bars above the actual data
+                let cropped_image = imageops::crop(&mut resized_image, 0, topIgnore, width, height).to_image();
                 self.image = Some(cropped_image);
             } else {
                 slog::warn!(logger, "Failed to capture window"; "window_id" => self.window_id);
@@ -78,12 +89,19 @@ impl ImageAnalyzer {
         let (snd, recv) = sync_channel::<Point>(4096);
         let image = self.image.as_ref().unwrap();
 
+        let local_min_x = ((min_x as f32) * DPI_SCALE) as u32;
+        let local_min_y = ((min_y as f32) * DPI_SCALE) as u32;
+
         if max_x == 0 {
             max_x = image.width();
+        } else {
+            max_x = ((max_x as f32) * DPI_SCALE) as u32;
         }
 
         if max_y == 0 {
             max_y = image.height();
+        } else {
+            max_y = ((max_y as f32) * DPI_SCALE) as u32;
         }
 
         image
@@ -99,7 +117,7 @@ impl ImageAnalyzer {
                         .unwrap_or(image_height)
                     || y > IGNORE_AREA_TOP + max_y
                     || y > max_y
-                    || y < min_y
+                    || y < local_min_y
                 {
                     return;
                 }
@@ -108,7 +126,7 @@ impl ImageAnalyzer {
                 'outer: for (x, _, px) in row {
                     if px.0[3] != 255 || x >= max_x {
                         return;
-                    } else if x < min_x {
+                    } else if x < local_min_x {
                         continue;
                     }
 

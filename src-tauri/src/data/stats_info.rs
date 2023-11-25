@@ -68,6 +68,7 @@ impl ClientStats {
         /*if should_debug.contains(&true) {
             self.debug_print(_logger);
         }*/
+        // self._debug_print(_logger);
     }
 
     // Detect whether we can read or not stat_tray and open it if needed
