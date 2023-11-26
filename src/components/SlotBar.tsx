@@ -64,9 +64,12 @@ const SlotBar = ({ className, config, botMode, onChange }: Props) => {
                         </button>
                     </div>
                     {slots[currentBarIndex].slots.map((slot, index) =>  (
-                        <Slot key={index} type={slot.slot_type} index={index} toggleSlotModal={(event,targetSlot) => toogleSlot(index,event,targetSlot)} indexName={index +""} slot={slots[currentBarIndex].slots[index]} />
-
+                        index !== 0 ?
+                        <Slot className={`slot-item-${index}`} key={index} type={slot.slot_type} index={index} toggleSlotModal={(event,targetSlot) => toogleSlot(index,event,targetSlot)} indexName={index +""} slot={slots[currentBarIndex].slots[index]} />
+                        :
+                        <></>
                     ))}
+                    <Slot className='slot-item-0' key={0} type={slots[currentBarIndex].slots[0].slot_type} index={0} toggleSlotModal={(event, targetSlot) => toogleSlot(0, event, targetSlot)} indexName='0' slot={slots[currentBarIndex].slots[0]} />
                     <div className="slotIndexDisplay">
                         {currentBarIndex + 1}
                     </div>
@@ -102,7 +105,7 @@ export default styled(SlotBar)`
         color: rgb(240, 209, 105);
         font-size: 1.2rem;
     }
-    
+
     & .grayedOutBtn {
         background-color: rgb(140, 140, 140) !important;
     }
