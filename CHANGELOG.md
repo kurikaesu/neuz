@@ -5,6 +5,10 @@ Date format: `DD/MM/YYYY`
 [@kurikaesu]: https://github.com/kurikaesu
 <!-- /maintainers -->
 
+**0.16.6**
+- Fixes
+  - macOS interface fix for slot up and down buttons and number indicator
+
 **0.16.5**
 - Fixes
   - Fix a bug in the previous resolution fix

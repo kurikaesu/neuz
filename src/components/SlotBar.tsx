@@ -47,10 +47,6 @@ const SlotBar = ({ className, config, botMode, onChange }: Props) => {
             <div className={className}>
 
                 <div className="slots">
-                    {slots[currentBarIndex].slots.map((slot, index) =>  (
-                        <Slot key={index} type={slot.slot_type} index={index} toggleSlotModal={(event,targetSlot) => toogleSlot(index,event,targetSlot)} indexName={index +""} slot={slots[currentBarIndex].slots[index]} />
-
-                    ))}
                     <div className="slotIndexChanger">
                         <button className={`changeBtn ${currentBarIndex === 8 ? 'grayedOutBtn' : ''}`} onClick={() => {
                             if (currentBarIndex != 8) {
@@ -67,6 +63,10 @@ const SlotBar = ({ className, config, botMode, onChange }: Props) => {
                             &#x25BC;
                         </button>
                     </div>
+                    {slots[currentBarIndex].slots.map((slot, index) =>  (
+                        <Slot key={index} type={slot.slot_type} index={index} toggleSlotModal={(event,targetSlot) => toogleSlot(index,event,targetSlot)} indexName={index +""} slot={slots[currentBarIndex].slots[index]} />
+
+                    ))}
                     <div className="slotIndexDisplay">
                         {currentBarIndex + 1}
                     </div>
@@ -92,23 +92,17 @@ export default styled(SlotBar)`
     }
 
     & .slotIndexChanger {
-        position: absolute;
-        top: 10px;
-        left: 10px;
+        padding-top: 10px;
         display: flex;
         flex-direction: column;
 
     }
 
     & .slotIndexDisplay {
-        position: absolute;
-        top: 20px;
-        right: 20px;
         color: rgb(240, 209, 105);
         font-size: 1.2rem;
-
-
     }
+    
     & .grayedOutBtn {
         background-color: rgb(140, 140, 140) !important;
     }
