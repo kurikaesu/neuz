@@ -49,14 +49,14 @@ const SlotBar = ({ className, config, botMode, onChange }: Props) => {
                 <div className="slots">
                     <div className="slotIndexChanger">
                         <button className={`changeBtn ${currentBarIndex === 8 ? 'grayedOutBtn' : ''}`} onClick={() => {
-                            if (currentBarIndex != 8) {
+                            if (currentBarIndex !== 8) {
                                 setCurrentBarIndex(currentBarIndex+1)
                             }
                         }}>
                             &#9650;
                         </button>
                         <button className={`changeBtn ${currentBarIndex === 0 ? 'grayedOutBtn' : ''}`} onClick={() => {
-                            if (currentBarIndex != 0) {
+                            if (currentBarIndex !== 0) {
                                 setCurrentBarIndex(currentBarIndex-1)
                             }
                         }}>
