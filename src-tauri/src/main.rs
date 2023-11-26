@@ -135,7 +135,7 @@ fn focus_client(_state: tauri::State<AppState>, app_handle: tauri::AppHandle) {
 fn get_profiles(_state: tauri::State<AppState>, app_handle: tauri::AppHandle) -> Vec<String> {
     drop(fs::create_dir(
         format!(
-            r"{}\",
+            r"{}/",
             app_handle
                 .path_resolver()
                 .app_data_dir()
@@ -145,7 +145,7 @@ fn get_profiles(_state: tauri::State<AppState>, app_handle: tauri::AppHandle) ->
         .clone(),
     ));
     let paths = fs::read_dir(format!(
-        r"{}\",
+        r"{}/",
         app_handle
             .path_resolver()
             .app_data_dir()
@@ -163,7 +163,7 @@ fn get_profiles(_state: tauri::State<AppState>, app_handle: tauri::AppHandle) ->
     if profiles.is_empty() {
         drop(fs::create_dir(
             format!(
-                r"{}\profile_DEFAULT",
+                r"{}/profile_DEFAULT",
                 app_handle
                     .path_resolver()
                     .app_data_dir()
@@ -193,7 +193,7 @@ fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Result<()> 
 }
 fn config_folder_path(app_handle: &tauri::AppHandle, profile_id: &String) -> String {
     format!(
-        r"{}\profile_{}",
+        r"{}/profile_{}",
         app_handle
             .path_resolver()
             .app_data_dir()
@@ -204,7 +204,7 @@ fn config_folder_path(app_handle: &tauri::AppHandle, profile_id: &String) -> Str
 }
 fn config_file_path(app_handle: &tauri::AppHandle, profile_id: &String) -> String {
     format!(
-        r"{}\.botconfig_{}",
+        r"{}/.botconfig_{}",
         app_handle
             .path_resolver()
             .app_data_dir()
@@ -291,7 +291,7 @@ async fn create_window(profile_id: String, app_handle: tauri::AppHandle) {
         tauri::WindowUrl::External("https://universe.flyff.com/play".parse().unwrap()),
     )
     .data_directory(PathBuf::from(format!(
-        r"{}\profile_{}",
+        r"{}/profile_{}",
         app_handle
             .path_resolver()
             .app_data_dir()
@@ -323,7 +323,7 @@ fn should_disconnect(config: &BotConfig) -> bool {
 fn start_bot(profile_id: String, state: tauri::State<AppState>, app_handle: tauri::AppHandle) {
     let logger = state.logger.clone();
     let config_path = format!(
-        r"{}\.botconfig_{}",
+        r"{}/.botconfig_{}",
         app_handle
             .path_resolver()
             .app_data_dir()
@@ -404,7 +404,7 @@ fn start_bot(profile_id: String, state: tauri::State<AppState>, app_handle: taur
             if config.change_id() > last_config_change_id {
                 config.serialize(
                     format!(
-                        r"{}\.botconfig_{}",
+                        r"{}/.botconfig_{}",
                         app_handle
                             .path_resolver()
                             .app_data_dir()
