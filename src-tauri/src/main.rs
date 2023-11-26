@@ -303,12 +303,13 @@ async fn create_window(profile_id: String, app_handle: tauri::AppHandle) {
     .center()
     .inner_size(WINDOW_WIDTH as f64, WINDOW_HEIGHT as f64)
     .title(format!("{} | Flyff Universe", profile_id))
+    .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0")
     .build()
     .unwrap();
     drop(window.show());
 
     let main_window = app_handle.get_window("main").unwrap();
-    drop(main_window.set_title(format!("{} Neuz | MadrigalStreetCartel", profile_id).as_str()));
+    drop(main_window.set_title(format!("{} Neuz | Kurikaesu", profile_id).as_str()));
     //window.once_global("tauri://close-requested", move |_| app_handle.restart());
 }
 fn should_disconnect(config: &BotConfig) -> bool {
