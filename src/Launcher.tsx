@@ -100,7 +100,7 @@ const Launcher = ({ className }: Props) => {
     }
 
     const getData=()=>{
-        fetch('https://raw.githubusercontent.com/MadrigalStreetCartel/neuz/main/updater.json')
+        fetch('https://raw.githubusercontent.com/kurikaesu/neuz/personal-improvements/updater.json')
         .then(function(response){
             return response.json();
         })

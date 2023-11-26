@@ -2,9 +2,13 @@
 Date format: `DD/MM/YYYY`
 
 <!-- maintainers -->
-[@genoxalmighty]: https://github.com/genoxalmighty
-[@slyker]: https://github.com/slyker
+[@kurikaesu]: https://github.com/kurikaesu
 <!-- /maintainers -->
+
+**0.16.5**
+- Fixes
+  - Fix a bug in the previous resolution fix
+  - Point the updater to my own repository instead.
 
 **0.16.4**
 - Fixes

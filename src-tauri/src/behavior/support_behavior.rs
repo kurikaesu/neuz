@@ -18,7 +18,6 @@ pub struct SupportBehavior<'a> {
     window: &'a Window,
     slots_usage_last_time: [[Option<Instant>; 10]; 9],
     last_buff_usage: Instant,
-    last_jump_time: Instant,
     avoid_obstacle_direction: String,
     last_far_from_target: Option<Instant>,
     //is_on_flight: bool,
@@ -31,7 +30,6 @@ impl<'a> Behavior<'a> for SupportBehavior<'a> {
             window,
             slots_usage_last_time: [[None; 10]; 9],
             last_buff_usage: Instant::now(),
-            last_jump_time: Instant::now(),
             avoid_obstacle_direction: "D".to_owned(),
             last_far_from_target: None,
             //is_on_flight: false,
@@ -74,7 +72,7 @@ impl<'a> Behavior<'a> for SupportBehavior<'a> {
                     Ok(payload) => {
                         local_app_handler.trigger_global("bot_config_c2s", Some(payload));
                     }
-                    Err(e) => {
+                    Err(_e) => {
                         slog::error!(mylogger, "Failed to reset timers");
                     }
                 }
@@ -200,7 +198,7 @@ impl SupportBehavior<'_> {
         }
     }
 
-    fn check_following(&mut self, config: &SupportConfig, logger: &Logger) {
+    fn check_following(&mut self, config: &SupportConfig, _logger: &Logger) {
         if self.last_buff_usage.elapsed().as_millis() > config.interval_between_buffs() {
             self.last_buff_usage = Instant::now();
             self.get_slot_for(config, None, SlotType::Following, true);

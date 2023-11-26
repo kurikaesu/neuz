@@ -30,7 +30,7 @@ use crate::{
     image_analyzer::ImageAnalyzer,
     ipc::{BotConfig, BotMode},
     movement::MovementAccessor,
-    platform::{eval_send_key, KeyMode},
+    platform::{eval_send_key, KeyMode, WINDOW_WIDTH, WINDOW_HEIGHT},
     utils::Timer,
 };
 
@@ -301,7 +301,7 @@ async fn create_window(profile_id: String, app_handle: tauri::AppHandle) {
     )))
     //.resizable(false)
     .center()
-    .inner_size(800.0, 600.0)
+    .inner_size(WINDOW_WIDTH as f64, WINDOW_HEIGHT as f64)
     .title(format!("{} | Flyff Universe", profile_id))
     .build()
     .unwrap();
